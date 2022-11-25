@@ -37,12 +37,12 @@ namespace AccesoDatos.DaoEntidades
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    Mueble Cat = new Mueble();
-                    Cat.MuebleID = Convert.ToInt32(dr[".MuebleID"]);
-                    Cat.IDsupervisor = Convert.ToInt32(dr["IDsupervisor"]);
-                    Cat.OrdenIngresoptID = Convert.ToInt32(dr["OrdenIngresoptID"]);
+                    Mueble Mu = new Mueble();
+                    Mu.MuebleID = Convert.ToInt32(dr["MuebleID"]);
+                    Mu.IDsupervisor = Convert.ToInt32(dr["IDsupervisor"]);
+                    Mu.OrdenIngresoptID = Convert.ToInt32(dr["OrdenIngresoptID"]);
 
-                    lista.Add(Cat);
+                    lista.Add(Mu);
                 }
 
             }
@@ -57,17 +57,18 @@ namespace AccesoDatos.DaoEntidades
             return lista;
         }
         /////////////////////////InsertaCliente
-        public Boolean InsertarCategoriaMueble(CategoriaMueble Cat)
+        public Boolean InsertarMueble(Mueble Mu)
         {
             SqlCommand cmd = null;
             Boolean inserta = false;
             try
             {
                 SqlConnection cn = Conexion.Instancia.Conectar();
-                cmd = new SqlCommand("spInsertarCategoriaMueble", cn);
+                cmd = new SqlCommand("spInsertarMueble", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@CategoriaMueble", Cat.CatMueble);
-                cmd.Parameters.AddWithValue("@MuebleID", Cat.MuebleID);
+                cmd.Parameters.AddWithValue("@MuebleID", Mu.MuebleID);
+                cmd.Parameters.AddWithValue("@IDsupervisor", Mu.IDsupervisor);
+                cmd.Parameters.AddWithValue("@OrdenIngresoptID", Mu.OrdenIngresoptID);
 
                 cn.Open();
                 int i = cmd.ExecuteNonQuery();
@@ -86,18 +87,18 @@ namespace AccesoDatos.DaoEntidades
 
 
         //////////////////////////////////EditaCliente
-        public Boolean EditarCategoriaMueble(CategoriaMueble Cat)
+        public Boolean EditarMueble(Mueble Mu)
         {
             SqlCommand cmd = null;
             Boolean edita = false;
             try
             {
                 SqlConnection cn = Conexion.Instancia.Conectar();
-                cmd = new SqlCommand("spEditaCategoriaMueble", cn);
+                cmd = new SqlCommand("spEditaMueble", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@CategoriaMuebleID", Cat.CategoriaMuebleID);
-                cmd.Parameters.AddWithValue("@CategoriaMueble", Cat.CatMueble);
-                cmd.Parameters.AddWithValue("@MuebleID", Cat.MuebleID);
+                cmd.Parameters.AddWithValue("@MuebleID", Mu.MuebleID);
+                cmd.Parameters.AddWithValue("@IDsupervisor", Mu.IDsupervisor);
+                cmd.Parameters.AddWithValue("@OrdenIngresoptID", Mu.OrdenIngresoptID);
 
                 cn.Open();
                 int i = cmd.ExecuteNonQuery();
@@ -117,28 +118,28 @@ namespace AccesoDatos.DaoEntidades
         //deshabilitaCliente
 
 
-        public List<CategoriaMueble> Buscar(string id)
+        public List<Mueble> Buscar(string id)
         {
             SqlCommand cmd = null;
-            List<CategoriaMueble> lista = new List<CategoriaMueble>();
+            List<Mueble> lista = new List<Mueble>();
             try
             {
                 SqlConnection cn = Conexion.Instancia.Conectar(); //singleton
-                cmd = new SqlCommand("spBuscarCategoriaMueble", cn);
+                cmd = new SqlCommand("spBuscarMueble", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@CategoriaMuebleID", id);
+                cmd.Parameters.AddWithValue("@MuebleID", id);
                 cn.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
 
-                    CategoriaMueble Cat = new CategoriaMueble();
-                    Cat.CategoriaMuebleID = Convert.ToInt32(dr["CategoriaMuebleID"]);
-                    Cat.CatMueble = dr["CategoriaMueble"].ToString();
-                    Cat.MuebleID = Convert.ToInt32(dr["MuebleID"]);
+                    Mueble Mu = new Mueble();
+                    Mu.MuebleID = Convert.ToInt32(dr[".MuebleID"]);
+                    Mu.IDsupervisor = Convert.ToInt32(dr["IDsupervisor"]);
+                    Mu.OrdenIngresoptID = Convert.ToInt32(dr["OrdenIngresoptID"]);
 
-                    lista.Add(Cat);
+                    lista.Add(Mu);
                 }
 
             }
@@ -156,4 +157,4 @@ namespace AccesoDatos.DaoEntidades
         #endregion metodos
     }
 }
-}
+

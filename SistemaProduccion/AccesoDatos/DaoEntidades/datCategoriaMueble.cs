@@ -67,6 +67,7 @@ namespace AccesoDatos.DaoEntidades
                 SqlConnection cn = Conexion.Instancia.Conectar();
                 cmd = new SqlCommand("spInsertarCategoriaMueble", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@CategoriaMuebleID", Cat.CategoriaMuebleID);
                 cmd.Parameters.AddWithValue("@CategoriaMueble", Cat.CatMueble);
                 cmd.Parameters.AddWithValue("@MuebleID", Cat.MuebleID);
                 
