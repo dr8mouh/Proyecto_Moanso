@@ -9,7 +9,7 @@ namespace entCategoriaMueble
     public class CategoriaMueble
     {
         public int CategoriaMuebleID { get; set; }
-        public string nombCliente { get; set; }
+        public string CatMueble { get; set; }
         public int MuebleID { get; set; }
     }
 }

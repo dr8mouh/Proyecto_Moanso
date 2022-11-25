@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AccesoDatos.BaseDatos;
+using entCategoriaMueble;
 
 namespace AccesoDatos.DaoEntidades
 {
@@ -21,30 +25,25 @@ namespace AccesoDatos.DaoEntidades
         #endregion singleton
 
         #region metodos
-        public List<entCliente.Cliente> ListarCliente()
+        public List<CategoriaMueble> ListarCategoriaMueble()
         {
             SqlCommand cmd = null;
-            List<entCliente.Cliente> lista = new List<entCliente.Cliente>();
+            List<CategoriaMueble> lista = new List<CategoriaMueble>();
             try
             {
                 SqlConnection cn = Conexion.Instancia.Conectar(); //singleton
-                cmd = new SqlCommand("spListaCliente", cn);
+                cmd = new SqlCommand("spListaCategoriaMueble", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cn.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    entCliente.Cliente Cli = new entCliente.Cliente();
-                    Cli.idCliente = Convert.ToInt32(dr["idCliente"]);
-                    Cli.nombCliente = dr["nombCliente"].ToString();
-                    Cli.apelCliente = dr["apelCliente"].ToString();
-                    Cli.direcCliente = dr["direcCliente"].ToString();
-                    Cli.celular = dr["celular"].ToString();
-                    Cli.dni = dr["dni"].ToString();
-                    Cli.estCliente = Convert.ToBoolean(dr["estCliente"]);
-                    Cli.fecRegCliente = Convert.ToDateTime(dr["fecRegCliente"]);
+                    CategoriaMueble Cat = new CategoriaMueble();
+                    Cat.CategoriaMuebleID = Convert.ToInt32(dr["CategoriaMuebleID"]);
+                    Cat.CatMueble = dr["CategoriaMueble"].ToString();
+                    Cat.MuebleID = Convert.ToInt32(dr["MuebleID"]);
 
-                    lista.Add(Cli);
+                    lista.Add(Cat);
                 }
 
             }
@@ -59,22 +58,18 @@ namespace AccesoDatos.DaoEntidades
             return lista;
         }
         /////////////////////////InsertaCliente
-        public Boolean InsertarCliente(entCliente.Cliente Cli)
+        public Boolean InsertarCategoriaMueble(CategoriaMueble Cat)
         {
             SqlCommand cmd = null;
             Boolean inserta = false;
             try
             {
                 SqlConnection cn = Conexion.Instancia.Conectar();
-                cmd = new SqlCommand("spInsertarCliente", cn);
+                cmd = new SqlCommand("spInsertarCategoriaMueble", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@nombCliente", Cli.nombCliente);
-                cmd.Parameters.AddWithValue("@apelCliente", Cli.apelCliente);
-                cmd.Parameters.AddWithValue("@direcCliente", Cli.direcCliente);
-                cmd.Parameters.AddWithValue("@celular", Cli.celular);
-                cmd.Parameters.AddWithValue("@dni", Cli.dni);
-                cmd.Parameters.AddWithValue("@estCliente", Cli.estCliente);
-                cmd.Parameters.AddWithValue("@fecRegCliente", Cli.fecRegCliente);
+                cmd.Parameters.AddWithValue("@CategoriaMueble", Cat.CatMueble);
+                cmd.Parameters.AddWithValue("@MuebleID", Cat.MuebleID);
+                
                 cn.Open();
                 int i = cmd.ExecuteNonQuery();
                 if (i > 0)
@@ -92,23 +87,19 @@ namespace AccesoDatos.DaoEntidades
 
 
         //////////////////////////////////EditaCliente
-        public Boolean EditarCliente(entCliente.Cliente Cli)
+        public Boolean EditarCategoriaMueble(CategoriaMueble Cat)
         {
             SqlCommand cmd = null;
             Boolean edita = false;
             try
             {
                 SqlConnection cn = Conexion.Instancia.Conectar();
-                cmd = new SqlCommand("spEditaCliente", cn);
+                cmd = new SqlCommand("spEditaCategoriaMueble", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@idCliente", Cli.idCliente);
-                cmd.Parameters.AddWithValue("@nombCliente", Cli.nombCliente);
-                cmd.Parameters.AddWithValue("@apelCliente", Cli.apelCliente);
-                cmd.Parameters.AddWithValue("@direcCliente", Cli.direcCliente);
-                cmd.Parameters.AddWithValue("@celular", Cli.celular);
-                cmd.Parameters.AddWithValue("@dni", Cli.dni);
-                cmd.Parameters.AddWithValue("@estCliente", Cli.estCliente);
-                cmd.Parameters.AddWithValue("@fecRegCliente", Cli.fecRegCliente);
+                cmd.Parameters.AddWithValue("@CategoriaMuebleID", Cat.CategoriaMuebleID);
+                cmd.Parameters.AddWithValue("@CategoriaMueble", Cat.CatMueble);
+                cmd.Parameters.AddWithValue("@MuebleID", Cat.MuebleID);
+            
                 cn.Open();
                 int i = cmd.ExecuteNonQuery();
                 if (i > 0)
@@ -126,56 +117,29 @@ namespace AccesoDatos.DaoEntidades
 
         //deshabilitaCliente
 
-        public Boolean DeshabilitarCliente(entCliente.Cliente Cli)
+        
+        public List<CategoriaMueble> Buscar(string id)
         {
             SqlCommand cmd = null;
-            Boolean delete = false;
-            try
-            {
-                SqlConnection cn = Conexion.Instancia.Conectar();
-                cmd = new SqlCommand("spDeshabilitarCliente", cn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@idCliente", Cli.idCliente);
-                cn.Open();
-                int i = cmd.ExecuteNonQuery();
-                if (i > 0)
-                {
-                    delete = true;
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            finally { cmd.Connection.Close(); }
-            return delete;
-        }
-        public List<Cliente> Buscar(string dni)
-        {
-            SqlCommand cmd = null;
-            List<Cliente> lista = new List<Cliente>();
+            List<CategoriaMueble> lista = new List<CategoriaMueble>();
             try
             {
                 SqlConnection cn = Conexion.Instancia.Conectar(); //singleton
-                cmd = new SqlCommand("spBuscarCliente", cn);
+                cmd = new SqlCommand("spBuscarCategoriaMueble", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@dni", dni);
+                cmd.Parameters.AddWithValue("@CategoriaMuebleID", id);
                 cn.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    entCliente.Cliente Cli = new entCliente.Cliente();
-                    Cli.idCliente = Convert.ToInt32(dr["idCliente"]);
-                    Cli.nombCliente = dr["nombCliente"].ToString();
-                    Cli.apelCliente = dr["apelCliente"].ToString();
-                    Cli.direcCliente = dr["direcCliente"].ToString();
-                    Cli.celular = dr["celular"].ToString();
-                    Cli.dni = dr["dni"].ToString();
-                    Cli.estCliente = Convert.ToBoolean(dr["estCliente"]);
-                    Cli.fecRegCliente = Convert.ToDateTime(dr["fecRegCliente"]);
 
-                    lista.Add(Cli);
+                    CategoriaMueble Cat = new CategoriaMueble();
+                    Cat.CategoriaMuebleID = Convert.ToInt32(dr["CategoriaMuebleID"]);
+                    Cat.CatMueble = dr["CategoriaMueble"].ToString();
+                    Cat.MuebleID = Convert.ToInt32(dr["MuebleID"]);
+
+                    lista.Add(Cat);
                 }
 
             }
@@ -193,4 +157,4 @@ namespace AccesoDatos.DaoEntidades
         #endregion metodos
     }
 }
-}
+

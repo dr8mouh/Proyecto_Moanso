@@ -8,8 +8,8 @@ namespace entMueble
 {
     public class Mueble
     {
-        public int CategoriaMuebleID { get; set; }
-        public string nombCliente { get; set; }
         public int MuebleID { get; set; }
+        public int IDsupervisor { get; set; }
+        public int OrdenIngresoptID { get; set; }
     }
 }
